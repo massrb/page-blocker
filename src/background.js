@@ -1,5 +1,20 @@
 import "@babel/polyfill";
 
+
+chrome.extension.getBackgroundPage().console.log('background.js foo');
+console.log('background.js ljg');
+
+
+chrome.runtime.onMessage.addListener(
+ function(request, sender, sendResponse) {
+    console.log(sender.tab ?
+            "from a content script:" + sender.tab.url :
+            "from the extension");
+    if (request.greeting == "hello")
+        sendResponse({farewell: "goodbye"});
+});
+
+
 let AppInitState = 0; // it means app is off on startup
 
 /**
@@ -10,6 +25,7 @@ let AppInitState = 0; // it means app is off on startup
 class Main {
   constructor() {}
   popUpClickSetup() {
+    console.log('in popup setup');
     chrome.browserAction.onClicked.addListener(tab => {
       if (this.toggleApp()) {
       } else {

@@ -34,6 +34,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
     "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.6.0",
     "dotenv": "^8.2.0",
     "file-loader": "^4.2.0",
     "gh-pages": "^2.1.1",
@@ -53,6 +54,7 @@
     "@material-ui/core": "^4.3.3",
     "@material-ui/icons": "^4.2.1",
     "react": "^16.8.6",
+    "react-blink-text": "^1.0.5",
     "react-dom": "^16.8.6"
   }
 }

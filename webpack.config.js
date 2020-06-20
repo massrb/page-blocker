@@ -14,6 +14,10 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
+          test: /\.css$/i,
+          use: ['css-loader']
+        },
+        {
           test: /\.(js|jsx)$/,
           exclude: /node_modules/,
           use: ["babel-loader"]
