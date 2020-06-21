@@ -11,12 +11,28 @@ const messageStyle = {
   padding: "15px"
 }
 
+function get_blocked_sites() {
+  let site_list_str = localStorage.getItem("blocked_sites") || '[]';
+  let site_list = JSON.parse(site_list_str);
+  return site_list;
+}
+
+function save_blocked_sites(sites) {
+  localStorage.setItem("blocked_sites", JSON.stringify(sites));
+}
+
+function isBlocked(site) {
+  let sites = get_blocked_sites();
+  return sites.includes(site);
+}
     
 
 export default class Index extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {blocked: false};
+    this.state = {blocked: false, previously_blocked: false};
+    this.block_site = this.block_site.bind(this);
+    this.site = window.location.hostname;
   }
 
   componentDidMount(){
@@ -25,6 +41,10 @@ export default class Index extends React.Component {
     });
     console.log('mounted content ljg !');
 
+    if (isBlocked(this.site)) {
+      this.setState({previously_blocked: true});
+    }
+
     let ctrlDown = false,
         ctrlKey = 17,
         cmdKey = 91,
@@ -32,7 +52,6 @@ export default class Index extends React.Component {
         bKey = 66;
 
     document.addEventListener("keydown", ev => {
-      console.log('key down !');
       if (ev.keyCode == ctrlKey || ev.keyCode == cmdKey) 
         {
         ctrlDown = true;
@@ -55,23 +74,29 @@ export default class Index extends React.Component {
   }
 
   block_site(site) {
-    let site_list_str = localStorage.getItem("blocked_sites") || '[]';
-    let site_list = JSON.parse(site_list_str);
+    console.log("block_site()");
+    let site_list = get_blocked_sites();
+    let delay = this.state.previously_blocked ? 0 : 5000;
     site_list.push(site);
-    localStorage.setItem("blocked_sites", JSON.stringify(site_list));
+    save_blocked_sites(site_list);
+
+    setTimeout(function() { 
+      chrome.runtime.sendMessage({closeThis: true}); 
+    }, delay);
   }
 
   render() {
     console.log('render');
-    let {blocked} = this.state,
-    site = window.location.hostname,
-    message = "Pages from " + site + " will be blocked";
-    if (blocked) {
+    let {previously_blocked, blocked} = this.state,
+    message = "Pages from " + this.site + " will be blocked";
+    if (blocked || previously_blocked) {
+      console.log('call block_site()');
+      this.block_site(this.site);
       return( 
         <div className="page-blocker-message" style={messageStyle}>
-        <Blink color='Black'
-        text={message} 
-        fontSize='30px'/>
+          <Blink color='Black'
+          text={message} 
+          fontSize='30px'/>
       </div>);
     } else {
       return null;

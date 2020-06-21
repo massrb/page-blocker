@@ -55,6 +55,7 @@
     "@material-ui/icons": "^4.2.1",
     "react": "^16.8.6",
     "react-blink-text": "^1.0.5",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-select": "^3.1.0"
   }
 }
