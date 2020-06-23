@@ -1,5 +1,7 @@
-# A Chrome extension boilerplate.
-
+# A Chrome extension page blocker based on chrome boiler plate code
+# 
+# this is still being developed and is a work in progress
+#
 ## Basic Usage
 
 ```
