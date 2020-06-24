@@ -27,9 +27,9 @@ export default class Index extends React.Component {
     console.log('mounted content ljg !');
 
     let that = this;
-    if (SiteTracker.isBlocked(this.site, function(response) {
-      console.log('blocked in content = ', response);
-      that.setState({previously_blocked: response});
+    if (SiteTracker.isBlocked(this.site).then(blocked => {
+      console.log('blocked in content = ', blocked);
+      that.setState({previously_blocked: blocked});
     }));
 
     let ctrlDown = false,
@@ -66,7 +66,7 @@ export default class Index extends React.Component {
     let delay = 0;
     if (!this.state.previously_blocked) {
       delay = 5000;
-      sitetracker.blockSite(site);
+      SiteTracker.blockSite(site);
     }
 
     setTimeout(function() { 

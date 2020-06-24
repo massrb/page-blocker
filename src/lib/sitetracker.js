@@ -10,15 +10,17 @@ export default class SiteTracker {
 //    return site_list;
   }
 
-  static isBlocked(site, func) {
-    chrome.runtime.sendMessage({checkSite: site}, function(response) {
-      console.log('check', site);
-      console.log('content script blocked = ' + response.blocked);
-      func(response.blocked);
-    });
-    
+  static isBlocked(site) {
+    return new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({checkSite: site}, function(response) 
+        {
+          console.log('check', site);
+          console.log('content script blocked = ' + response.blocked);
+          resolve(response.blocked);
+        });
+    })
+  }
 //    let sites = this.get_blocked_sites();
 //    return sites.includes(site);
-  }
 
 }
