@@ -21,14 +21,9 @@ export default class Index extends React.Component {
   }
 
   componentDidMount(){
-//    chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-//      console.log(response.farewell);
-//    });
-    console.log('mounted content ljg !');
 
     let that = this;
     if (SiteTracker.isBlocked(this.site).then(blocked => {
-      console.log('blocked in content = ', blocked);
       that.setState({previously_blocked: blocked});
     }));
 
@@ -62,7 +57,6 @@ export default class Index extends React.Component {
 
   blockSite(site) {
     console.log("block_site()");
-    // let site_list = SiteTracker.get_blocked_sites();
     let delay = 0;
     if (!this.state.previously_blocked) {
       delay = 5000;
@@ -75,11 +69,9 @@ export default class Index extends React.Component {
   }
 
   render() {
-    console.log('render');
     let {previously_blocked, blocked} = this.state,
     message = "Pages from " + this.site + " will be blocked";
     if (blocked || previously_blocked) {
-      console.log('call blockSite()');
       this.blockSite(this.site);
       return( 
         <div className="page-blocker-message" style={messageStyle}>

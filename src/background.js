@@ -16,12 +16,11 @@ function siteIsBlocked(site) {
   return site_list.includes(site);
 }
 
-
 chrome.runtime.onMessage.addListener(
- function(request, sender, sendResponse) {
+  function(request, sender, sendResponse) {
     console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
+    "from a content script:" + sender.tab.url :
+    "from the extension");
     if(request.closeThis) chrome.tabs.remove(sender.tab.id);
     else if(request.checkSite) {
       let result = siteIsBlocked(request.checkSite);
@@ -30,35 +29,9 @@ chrome.runtime.onMessage.addListener(
       sendResponse({blocked: result})
     } 
     else if(request.blockSite) {
-        let site_list = getBlockedSites();
-        site_list.push(request.blockSite);
-        saveBlockedSites(site_list);
+      let site_list = getBlockedSites();
+      site_list.push(request.blockSite);
+      saveBlockedSites(site_list);
     }
 });
 
-/*
-let AppInitState = 0; // it means app is off on startup
-
-class Main {
-  constructor() {}
-  popUpClickSetup() {
-    console.log('in popup setup');
-    chrome.browserAction.onClicked.addListener(tab => {
-      if (this.toggleApp()) {
-      } else {
-        this.stopApp();
-      }
-    });
-  }
-
-  toggleApp = () => {
-    AppInitState = AppInitState ? 0 : 1;
-    return AppInitState;
-  };
-
-  stopApp = () => {
-    AppInitState = 0;
-  };
-}
-
-*/
